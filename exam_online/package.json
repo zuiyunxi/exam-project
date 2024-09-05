@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/pro-components": "^2.7.15",
+    "@emotion/css": "^11.13.0",
     "@reduxjs/toolkit": "^2.2.7",
     "antd": "^5.20.5",
     "axios": "^1.7.7",

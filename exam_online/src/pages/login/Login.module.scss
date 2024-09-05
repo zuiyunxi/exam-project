@@ -1,0 +1,11 @@
+.coderow{
+  display: flex;
+  justify-content: space-between;
+  .pic{
+    height: 40px;
+    margin-left: 10px;
+    img{
+      height: 40px;
+    }
+  }
+}
