@@ -1,11 +1,7 @@
-// ts类型
 
 
-export interface BaseRes<T = any> {
-  code: number;
-  msg: string;
-  data: T
-}
+export type { BaseRes } from './base'
+
 
 export type UserListParams = {
   page: number
@@ -21,18 +17,19 @@ export type User = {
   role: string[]
   status: 0 | 1
   username: string
-  __v: number
   _id: string
+  sex:0|1
+  email:string
+  age:number
 }
 
-
 export type UserList = {
-  list: User[];
-  total: number;
+  list: User[]
+  total: number
   totalPage: number
 }
 
-
-export type UpdateUserListParams = { id: string } & Partial<Pick<User, 'username' | 'password' | 'role' | 'status'>>
-
+export type CreateUserParams=Pick<User,'username'|'password'|'status'|'age'|'email'|'sex'>
+// 编辑用户的参数
+export type UpdateUserListParams = { id: string } & Partial<Omit<User, 'creator'|'lastOnlineTime'|'_id'>>
 
