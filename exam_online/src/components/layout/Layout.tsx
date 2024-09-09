@@ -18,6 +18,8 @@ import type { RootState } from '../../store'
 import { userInfoApi } from '../../services/login';
 import { setUserInfo } from '../../store/modules/user';
 import { message } from 'antd'
+// import { logoutApi } from '../../services/login';
+import type { MenuProps } from 'antd';
 
 
 interface Props {
@@ -30,11 +32,16 @@ const Layout: React.FC<Props> = (props) => {
   const dispatch = useDispatch()
   const userInfo = useSelector((state: RootState) => state.user)
 
+  // 点击退出登录
+  const onClick: MenuProps['onClick'] = () => {
+    localStorage.removeItem('token')
+    navigate('/login')
+  };
   
   useEffect(() => {
     userInfoApi()
       .then(res => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         dispatch(setUserInfo(res.data.data))
       })
       .catch(e => {
@@ -86,6 +93,7 @@ const Layout: React.FC<Props> = (props) => {
             title: userInfo.username,
             render: (props, dom) => {
               return (
+                <div >
                 <Dropdown
                   menu={{
                     items: [
@@ -95,10 +103,14 @@ const Layout: React.FC<Props> = (props) => {
                         label: '退出登录',
                       },
                     ],
+                    onClick
                   }}
                 >
-                  {dom}
+                  <a onClick={(e) => e.preventDefault()}>
+                    {dom}
+                  </a>
                 </Dropdown>
+                </div>
               );
             },
           }}
