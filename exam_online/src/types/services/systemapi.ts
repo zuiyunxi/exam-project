@@ -29,3 +29,13 @@ export type CreateUserParams=Pick<User,'username'|'password'|'status'|'age'|'ema
 // 编辑用户的参数
 export type UpdateUserListParams = { id: string } & Partial<Omit<User, 'creator'|'lastOnlineTime'|'_id'>>
 
+// 角色列表
+export type RoleItem = {
+  createTime: number
+  creator: string
+  disabled: boolean
+  name: string
+  permission: string[]
+  value: string
+  _id: string
+}

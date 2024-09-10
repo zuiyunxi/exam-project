@@ -45,3 +45,8 @@ export const updateUserApi = (params: UpdateUserParams) => {
 export const menuListApi=()=>{
     return request.get<BaseRes>('/user/menulist')
 }
+
+//查询菜单
+export const permissionListApi = () => {
+    return request.get<BaseRes>('/permission/list')
+  }
