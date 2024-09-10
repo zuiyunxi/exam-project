@@ -17,7 +17,7 @@ import UserManage from "../pages/userManage/UserManage";
 import UserMenuManage from "../pages/userMenuManage/UserMenuManage";
 import UserInfo from "../pages/userInfo/UserInfo";
 import UserOptions from "../pages/userOptions/UserOptions";
-import UserList from "../pages/userList/UserList"; 
+import UserList from "../pages/userLists/UserList"; 
 
 import ItemBank from "../pages/itemBank/ItemBank";
 import ItemCreate from "../pages/itemCreate/ItemCreate";
