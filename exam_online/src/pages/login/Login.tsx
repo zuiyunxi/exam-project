@@ -49,7 +49,7 @@ const Login: React.FC = () => {
       const res = await loginApi(values)
       console.log(res.data);
       if(res.data.code === 200){
-        // message.success('登录成功')
+        message.success('登录成功')
         localStorage.setItem('token' , res.data.data.token)
         navigate('/')
       }else if(res.data.code === 1005){

@@ -1,13 +1,9 @@
-
-
 export type { BaseRes } from './base'
-
 
 export type UserListParams = {
   page: number
   pagesize: number
 }
-
 
 export type User = {
   avator: string
@@ -18,7 +14,7 @@ export type User = {
   status: 0 | 1
   username: string
   _id: string
-  sex:0|1
+  sex: '男' | '女'
   email:string
   age:number
 }

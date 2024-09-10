@@ -1,12 +1,9 @@
 // ts类型
-
-
 export interface BaseRes<T = any> {
   code: number;
   msg: string;
   data: T
 }
-
 
 // 登录参数
 export interface LoginParams {
@@ -22,7 +19,6 @@ export interface LoginResponse {
 export interface CaptchaResponse {
   code: string
 }
-
 
 export interface UserInfoResponse {
   age?: number

@@ -1,5 +1,8 @@
 import {
   LogoutOutlined,
+  CrownFilled,
+  SmileFilled,
+  UserOutlined
 } from '@ant-design/icons';
 import {
   PageContainer,
@@ -9,17 +12,19 @@ import {
 } from '@ant-design/pro-components';
 import {
   Dropdown,
+  Spin
 } from 'antd';
 import React, { useState , useEffect } from 'react';
-import defaultProps from './defaultProps';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../store'
-import { userInfoApi } from '../../services/login';
-import { setUserInfo } from '../../store/modules/user';
+import { getUserInfoAction } from '../../store/modules/user'
+// import { setUserInfo } from '../../store/modules/user';
 import { message } from 'antd'
 // import { logoutApi } from '../../services/login';
 import type { MenuProps } from 'antd';
+import { menuListApi } from '../../services/systemap';
+
 
 
 interface Props {
@@ -30,7 +35,9 @@ const Layout: React.FC<Props> = (props) => {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
-  const userInfo = useSelector((state: RootState) => state.user)
+  const userInfo = useSelector((state: RootState) => state.user.info)
+  const loading = useSelector((state: RootState) => state.user.loading)
+  const [menuList , setMenuList] = useState([])
 
   // 点击退出登录
   const onClick: MenuProps['onClick'] = () => {
@@ -38,28 +45,53 @@ const Layout: React.FC<Props> = (props) => {
     navigate('/login')
   };
   
+  // useEffect(() => {
+  //   userInfoApi()
+  //     .then(res => {
+  //       // console.log(res.data.data);
+  //       dispatch(setUserInfo(res.data.data))
+  //     })
+  //     .catch(e => {
+  //       console.log(e);
+  //       if(e.status === 401){
+  //         message.error('用户信息失效，请重新登录')
+  //         navigate('/login')
+  //       } else{
+  //         message.error('请求失败')
+  //       }
+        
+  //     })
+  // } , [])
+
+
+  // if (typeof document === 'undefined') {
+  //   return <div />;
+  // }
+
   useEffect(() => {
-    userInfoApi()
+    // 发送异步action
+    dispatch(getUserInfoAction())
+
+    menuListApi()
       .then(res => {
-        // console.log(res.data.data);
-        dispatch(setUserInfo(res.data.data))
+        console.log(res.data.data.list);
+        setMenuList(res.data.data.list.map(item => {
+          return {
+            ...item,
+            routes: item.children
+          }
+        }))
       })
       .catch(e => {
         console.log(e);
-        if(e.status === 401){
-          message.error('用户信息失效，请重新登录')
-          navigate('/login')
-        } else{
-          message.error('请求失败')
-        }
-        
       })
-  } , [])
+  }, [])
 
-
-  if (typeof document === 'undefined') {
-    return <div />;
-  }
+  if (loading) return (
+    <div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Spin size="large" />
+    </div>
+  )
 
   return (
     <div
@@ -74,7 +106,21 @@ const Layout: React.FC<Props> = (props) => {
           title="onlineExam"
           prefixCls="my-prefix"
           logo="https://cn.redux.js.org/img/redux.svg"
-          {...defaultProps}
+          // {...defaultProps}
+          // 权限
+          route={{
+            path: '/',
+            routes: [
+              {
+                path: '/',
+                name: '首页',
+                icon: <SmileFilled />,
+              },
+              ...menuList
+            ]
+          }}
+
+
           location={{
             pathname: location.pathname
           }}
@@ -93,24 +139,32 @@ const Layout: React.FC<Props> = (props) => {
             title: userInfo.username,
             render: (props, dom) => {
               return (
-                <div >
                 <Dropdown
                   menu={{
                     items: [
+                      {
+                        key: 'userInfo',
+                        icon: <UserOutlined />,
+                        label: <Link to="/userManage/personal">个人信息</Link>
+                      },
                       {
                         key: 'logout',
                         icon: <LogoutOutlined />,
                         label: '退出登录',
                       },
                     ],
-                    onClick
+                    onClick: ({ key }) => {
+                      if (key === 'logout') {
+                        localStorage.removeItem('token')
+                        navigate('/login')
+                      }
+                    }
                   }}
                 >
                   <a onClick={(e) => e.preventDefault()}>
                     {dom}
                   </a>
                 </Dropdown>
-                </div>
               );
             },
           }}
@@ -122,11 +176,10 @@ const Layout: React.FC<Props> = (props) => {
                 const cur = props.route?.routes.find((v : any)=> v.path === item.path)
                 if(cur?.routes){
                   navigate(cur?.routes[0].path)
-                }else{
+                } else {
                   navigate(item.path!)
                 }
-              }
-              }
+              }}
             >
               {dom}
             </div>
@@ -155,76 +208,3 @@ const Layout: React.FC<Props> = (props) => {
 
 export default Layout
 
-
-
-
-
-// import React, { useEffect, useState } from 'react'
-// import { NavLink, useNavigate } from 'react-router-dom'
-
-// import style from './Layout.module.scss'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { userInfoApi } from '../../services/login'
-// import { setUserInfo } from '../../store/modules/user'
-// import { message } from 'antd'
-
-
-// interface Props {
-//   children: React.ReactNode
-// }
-
-// interface Permission{
-//   createTime: number
-//   disabled: boolean
-//   isBtn: boolean
-//   name: string
-//   path: string
-//   pid: string
-//   __v: number
-//   _id: string
-//   }
-
-
-// const Layout: React.FC<Props> = (props) => {
-//   const navigate = useNavigate()
-//   const dispatch = useDispatch()
-//   const [navList , setNavList] = useState<Permission[]>([])
-
-//   useEffect(() => {
-//     userInfoApi()
-//       .then(res => {
-//         console.log(res.data);
-//         dispatch(setUserInfo(res.data.data))
-//         setNavList(res.data.data.permission)
-//       })
-//       .catch(e => {
-//         console.log(e);
-//         if(e.status === 401){
-//           message.error('用户信息失效，请重新登录')
-//           navigate('/login')
-//         } else{
-//           message.error('请求失败')
-//         }
-        
-//       })
-//   } , [])
-
-//   return (
-//     <div>
-//       <header></header>
-//       <main>
-//         <div className={style.side}>
-//           {/* {navList.map(item => 
-//             <div><NavLink key={item._id} to={item.path}>{item.name}</NavLink></div>
-//           )} */}
-//           <div><NavLink to="/">首页</NavLink></div>
-//           <div><NavLink to="/userManage/personal">个人信息</NavLink></div>
-//           <div><NavLink to="/userManage/manage-page">用户列表</NavLink></div>
-//         </div>
-//       </main>
-//       {props.children}
-//     </div>
-//   )
-// }
-
-// export default Layout

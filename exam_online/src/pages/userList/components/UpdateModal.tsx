@@ -11,12 +11,12 @@ import {
 import type { FormProps } from 'antd'
 
 type FieldType={
-    username:string,
-    password:string,
-    age:number,
-    email:string,
-    sex:0|1,
-    status:0|1
+    username: string,
+    password: string,
+    age: number,
+    email: string,
+    sex: 0|1,
+    status: 0|1
 }
 
 interface Props{
@@ -24,7 +24,6 @@ interface Props{
     visible:boolean,
     onOk:(values:FieldType)=>void,
     onCancel:()=>void
-
 }
 
 const UpdateModal:React.FC<Props> = ({
@@ -57,21 +56,21 @@ const UpdateModal:React.FC<Props> = ({
 
     return (
        <Modal title={initValue?'编辑用户':'新增用户' } open={visible} onOk={handleOk} onCancel={onCancel}>
-            <Form 
-            form={form}
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
-            onFinish={onFinish}
-            autoComplete="off"
-            >
+        <Form 
+          form={form}
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          onFinish={onFinish}
+          autoComplete="off"
+        >
 
-            <Form.Item<FieldType>
-            label="用户名"
-            name="username"
-            rules={[{ required: true, message: '请输入用户名!' }]}
-            >
-            <Input />
-            </Form.Item>
+        <Form.Item<FieldType>
+          label="用户名"
+          name="username"
+          rules={[{ required: true, message: '请输入用户名!' }]}
+        >
+          <Input />
+        </Form.Item>
 
         <Form.Item<FieldType>
           label="密码"
@@ -95,7 +94,6 @@ const UpdateModal:React.FC<Props> = ({
           rules={[
             { required: true, message: '请输入邮箱!' },
             {type: 'email', message: '请输入正确的邮箱!' }
-
         ]}
         >
           <Input placeholder='输入邮箱'/>
@@ -106,7 +104,7 @@ const UpdateModal:React.FC<Props> = ({
           name="sex"
           rules={[{ required: true, message: '请输入性别!' }]}
         >
-            
+  
           <Select placeholder='输入性别'  options={[
             {value: 1, label: '男'},
             {value: 0, label: '女'}
