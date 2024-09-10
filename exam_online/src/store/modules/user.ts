@@ -8,7 +8,6 @@ export const getUserInfoAction = createAsyncThunk('getUserInfoAction', async () 
   return res.data.data
 })
 
-
 const initialState: { loading: boolean, info: UserInfoResponse } = {
   loading: true,
   info: {
@@ -18,8 +17,6 @@ const initialState: { loading: boolean, info: UserInfoResponse } = {
     role: []
   }
 }
-
-
 
 export const userSlice = createSlice({
   name: 'user',
@@ -42,10 +39,8 @@ export const userSlice = createSlice({
       })
   }
 
-  
 })
 
 export const {} = userSlice.actions
 
 export default userSlice.reducer
-
