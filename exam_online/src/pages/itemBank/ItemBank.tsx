@@ -47,8 +47,8 @@ const ItemBank = () => {
     }
   ]
   return (<Table columns={columns} 
-            dataSource={questionList} 
-            rowKey={'_id'} 
+            dataSource={questionList}
+            rowKey={'_id'}
             bordered 
             // pagination={ }
             />)
