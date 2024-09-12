@@ -6,7 +6,8 @@ import type{
     UserListParams,
     UpdateUserListParams,
     CreateUserParams,
-    User
+    User,
+    userUpdateInfoParams
 } from '../types/services/systemapi'
 
 export const userListApi=(params: UserListParams)=>{
@@ -22,7 +23,7 @@ export const updateUserListApi=(params: UpdateUserListParams)=>{
 export const delUserListApi=(params:{id:string})=>{
     return request.post<BaseRes>('/user/remove',params)
 }
-export const createUserApi=(params:CreateUserParams)=>{
+export const createUserApi=(params:userUpdateInfoParams)=>{
     return request.post<BaseRes>('/user/create',params)
 }
 export const roleListApi=()=>{
@@ -54,3 +55,8 @@ export const roleUpdateApi = (params:{id:string,permission:string[]}) => {
 export const questionListApi = () => {
     return request.get<BaseRes>('/question/list')
 }
+
+//删除接口
+export const removeUserApi = (params:{id:string}) => {
+    return request.post<BaseRes>('/user/remove', params)
+  }

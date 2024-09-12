@@ -1,43 +1,36 @@
-import React, { useState } from 'react'
-import { Switch,message } from 'antd'
-import type {User,UpdateUserListParams} from '../../../types/services/systemapi'
+import React,{ useState } from 'react'
+import { Switch, Space, message } from 'antd'
+import type{ User,UserUpdataType } from '../../../types/services/systemapi'
 import { updateUserListApi } from '../../../services/systemap'
 
-interface Props{
-    row:User,
-    refresh:()=>void
+interface props {
+  record:User 
+  getUserList:() => void
 }
-const Status :React.FC<Props> = (props) => {
-  const [loading,setLoading]=useState(false)
-  const updateUser=async(params:UpdateUserListParams)=>{
-    setLoading(true)
-    try {
-      const res=await updateUserListApi(params)
-      if(res.data.code===200){
-        message.success('修改成功')
-        props.refresh()
-      }else{
+
+const Status = (props:props) => {
+  const getUserUpDate = async (params:UserUpdataType) => {
+    try{
+      const res = await updateUserListApi(params)
+      if(res.data.code !== 200){
         message.error(res.data.msg)
+      }else{
+        message.success('修改成功')
+         props.getUserList()
       }
-      setLoading(false)
-    } catch (e) {
-      setLoading(false)
+    }catch(e){
+      message.error('修改失败')
     }
   }
   return (
-    <Switch
-    loading={loading}
-    disabled ={props.row.username==='root'}
-    checkedChildren='开启'
-    unCheckedChildren='关闭'
-    checked={props.row.status===1}
-    onChange={(checked:boolean)=>{
-      updateUser({id:props.row._id,status:checked?1:0})
-    }}
-    >
-    
-
-    </Switch>
+    <Space>
+      <Switch checked={props.record.status === 1}
+      disabled={props.record.username === 'root'}
+      onChange={(checked:boolean) => {
+        getUserUpDate( { id: props.record._id, status: checked ? 1 : 0})
+        console.log(props.record.status)
+      }}/>
+    </Space>
   )
 }
 

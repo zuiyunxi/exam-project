@@ -1,139 +1,105 @@
-import React, { useEffect } from 'react'
-import { 
-    Button ,
-    Radio,
-    Select,
-    InputNumber,
-    Form,
-    Input,
-    Modal
-} from 'antd'
-import type { FormProps } from 'antd'
+import React, {  useEffect} from 'react'
+import { Radio, Form, Input,InputNumber,Modal, Select } from 'antd';
+import type { FormProps } from 'antd';
+import type { User } from '../../../../type/services/systemapi';
 
-type FieldType={
-    username: string,
-    password: string,
-    age: number,
-    email: string,
-    sex: 0|1,
-    status: 0|1
+type FieldType = {
+  username: string;
+  password: string;
+  age:string;
+  email:string;
+  sex:'男'|'女'
+  status:0|1
+};
+interface props {
+  setIsModalOpen : () => void
+  isModalOpen:boolean,
+  onOk:(values : User) => void
+  fromValue:Partial<User>|null
 }
 
-interface Props{
-    initValue?:Partial<FieldType>|null,
-    visible:boolean,
-    onOk:(values:FieldType)=>void,
-    onCancel:()=>void
-}
-
-const UpdateModal:React.FC<Props> = ({
-    initValue,
-    visible,
-    onOk,
-    onCancel
+const UpdateModal:React.FC<props>= ({
+  setIsModalOpen,
+  isModalOpen,
+  onOk,
+  fromValue
 }) => {
-    const [form] = Form.useForm()
-
-    const handleOk = () => {
-        form.submit()
-      };
-      const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        // 校验成功，通知父组件数据
-        onOk(values)
-      }
-      useEffect(()=>{
-        if(initValue){
-            form.setFieldsValue({...initValue})
-        }
-      },[initValue])
-
-      useEffect(()=>{
-        if(!visible){
-            form.resetFields()
-        }
-      },[visible])
-    
-
-    return (
-       <Modal title={initValue?'编辑用户':'新增用户' } open={visible} onOk={handleOk} onCancel={onCancel}>
-        <Form 
-          form={form}
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          onFinish={onFinish}
+  const [form] = Form.useForm()
+  const onFinish: FormProps<User>['onFinish'] = (values) => {
+    onOk(values)
+  }
+  useEffect(() => {
+      form.setFieldsValue(fromValue)
+  },[fromValue])
+  useEffect(() => {
+    if(!isModalOpen){
+      form.resetFields()
+    }
+  }, [isModalOpen])
+  return (
+      <Modal title="编辑" open={isModalOpen} onCancel={setIsModalOpen} onOk={() => {form.submit()}}>
+        <Form
+          name="basic"
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 20 }}
+          style={{ maxWidth: 600 }}
           autoComplete="off"
+          onFinish={onFinish}
+          form={form}
         >
+          <Form.Item<FieldType>
+            label="用户名"
+            name="username"
+            rules={[{ required: true, message: '请输入用户名' }]}
+          >
+            <Input />
+          </Form.Item>
 
-        <Form.Item<FieldType>
-          label="用户名"
-          name="username"
-          rules={[{ required: true, message: '请输入用户名!' }]}
-        >
-          <Input />
-        </Form.Item>
+          <Form.Item<FieldType>
+            label="密码"
+            name="password"
+            rules={[{ required: true, message: '请输入密码' }]}
+          >
+            <Input.Password />
+          </Form.Item>
 
-        <Form.Item<FieldType>
-          label="密码"
-          name="password"
-          rules={[{ required: true, message: '请输入密码!' }]}
-        >
-          <Input.Password/>
-        </Form.Item>
-
-        <Form.Item<FieldType>
-          label="年龄"
-          name="age"
-          rules={[{ required: true, message: '请输入年龄!' }]}
-        >
-          <InputNumber />
-        </Form.Item>
-
-        <Form.Item<FieldType>
-          label="邮箱"
-          name="email"
-          rules={[
-            { required: true, message: '请输入邮箱!' },
-            {type: 'email', message: '请输入正确的邮箱!' }
-        ]}
-        >
-          <Input placeholder='输入邮箱'/>
-        </Form.Item>
-
-        <Form.Item<FieldType>
-          label="性别"
-          name="sex"
-          rules={[{ required: true, message: '请输入性别!' }]}
-        >
-  
-          <Select placeholder='输入性别'  options={[
-            {value: 1, label: '男'},
-            {value: 0, label: '女'}
-          ]}/>
-        </Form.Item>
-
-        <Form.Item<FieldType>
-          label="帐号状态"
-          name="status"
-          rules={[{ required: true, message: '请输入状态!' }]}
-        >
-
-          <Radio.Group>
-            <Radio value={1}>启用</Radio>
-            <Radio value={0}>禁用</Radio>
-          </Radio.Group>
-        </Form.Item>
-
-
-
-
-
-
-               
-            </Form>
-
-       </Modal>
-
-    )
+          <Form.Item<FieldType>
+            label="年龄"
+            name="age"
+            rules={[{ required: true, message: '请输入年龄' }]}
+          >
+            <InputNumber />
+          </Form.Item>
+          <Form.Item<FieldType>
+            label="邮箱"
+            name="email"
+            rules={[{ required: true, message: '请输入邮箱' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item<FieldType>
+            label="性别"
+            name="sex"
+            rules={[{ required: true, message: '请输入性别' }]}
+          >
+            <Select options={[
+              {label:'男', value:'男'},
+              {label:'女', value:'女'}
+            ]} />
+          </Form.Item>
+          <Form.Item<FieldType>
+            label="账号状态"
+            name="status"
+            rules={[{ required: true, message: '请选择状态!' }]}
+          >
+            <Radio.Group>
+              <Radio value={1}>启用</Radio>
+              <Radio value={0}>禁用</Radio>
+            </Radio.Group>
+          </Form.Item>
+        </Form>
+      </Modal>
+  )
 }
 
 export default UpdateModal

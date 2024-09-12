@@ -1,0 +1,14 @@
+.searchForm {
+  :global {
+    .ant-form-item {
+      width: calc(100% / 3 - 16px);
+      margin-bottom: 20px;
+    }
+    .ant-form-item-label {
+      width: 60px;
+    }
+    .ant-form-item-control{
+      width: 148px;
+    }
+  }
+}
