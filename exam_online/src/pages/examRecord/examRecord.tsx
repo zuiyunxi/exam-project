@@ -5,13 +5,11 @@ import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable, TableDropdown } from '@ant-design/pro-components';
 import { Button, Dropdown, Space, Drawer } from 'antd';
 import { useRef } from 'react';
-import request from 'umi-request';
-
-
 import { getExamApi, getExamDetailApi } from '../../services/exam'
 import type { ExamListItem , ExamInfoResponse , QuestionItem } from '../../types/services/exam';
 import dayjs from 'dayjs';
-import { current } from '@reduxjs/toolkit';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 import style from './examRecord.module.scss'
 
@@ -81,6 +79,29 @@ const examRecord: React.FC = () => {
         setGapFilling(tkArr)
       })
     
+  };
+
+  //导出PDF
+  const exportToPDF = () => {
+    // 确保当前有选中的记录
+    if (!examInfo) {
+      // 可以在这里添加错误处理逻辑，如显示错误消息
+      return;
+    }
+  
+    // 获取要导出的 DOM 元素
+    const element = document.getElementById('table-to-export');
+    if (!element) {
+      console.error('Element with ID "table-to-export" not found.');
+      return; // 退出函数，因为没有找到元素
+    }
+  
+    html2canvas(element).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, 'PNG', 0, 0, 210, 297); // A4 纸大小
+      pdf.save('exam-record.pdf'); // 导出 PDF 文件
+    });
   };
 
 
@@ -272,17 +293,29 @@ const examRecord: React.FC = () => {
   return (
     <>
 
-    <Drawer title="试卷预览" onClose={onClose} open={open} size='large'>
+    <Drawer 
+    title="试卷预览" 
+    onClose={onClose} 
+    open={open} size='large'
+    extra={
+      <Space>
+        <Button  onClick={exportToPDF}>导出PDF</Button>
+        <Button type="primary" onClick={onClose}>
+          OK
+        </Button>
+      </Space>
+    }
+    >
       { examInfo 
           && 
-        <div className={style.con}>
-        <div className={style.title}>
+        <div id='table-to-export' className={style.con}>
+        <div id='table-to-export' className={style.title}>
           <h1>{examInfo?.name}</h1>
           <p>科目：{examInfo?.classify}</p>
         </div>
 
         {singleChoice.length === 0 ? <></> :
-          <div className={style.info}>
+          <div id='' className={style.info}>
             <b>单选题</b>
             <ul>
               {singleChoice.map((it,idx) => 
