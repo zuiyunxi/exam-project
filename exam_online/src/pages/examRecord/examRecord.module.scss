@@ -1,0 +1,33 @@
+.con{
+  padding: 24px;
+  .title{
+    text-align: center;
+    h1{
+      line-height: 50px;
+    }
+    p{
+      line-height: 30px;
+    }
+  }
+}
+
+.info{
+  font-size: 16px;
+  b{
+    color: #1890ff;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: block;
+  }
+  ul{
+    li{
+      margin-bottom: 16px;
+      p{
+        margin-bottom: 16px;
+      }
+      span{
+        margin-right: 20px;
+      }
+    }
+  }
+}
