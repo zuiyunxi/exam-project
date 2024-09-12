@@ -74,7 +74,7 @@ const Layout: React.FC<Props> = (props) => {
 
     menuListApi()
       .then(res => {
-        console.log(res.data.data.list);
+        // console.log(res.data.data.list);
         setMenuList(res.data.data.list.map(item => {
           return {
             ...item,

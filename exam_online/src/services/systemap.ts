@@ -9,16 +9,11 @@ import type{
     User
 } from '../types/services/systemapi'
 
-
-// axios.defaults.baseURL='/bwapi'
-
-
 export const userListApi=(params: UserListParams)=>{
     return request.get<BaseRes<UserList>>('/user/list',{
         params
     })
 }
-
 
 export const updateUserListApi=(params: UpdateUserListParams)=>{
     return request.post<BaseRes>('/user/update',params)
@@ -50,3 +45,12 @@ export const menuListApi=()=>{
 export const permissionListApi = () => {
     return request.get<BaseRes>('/permission/list')
   }
+
+//编辑角色
+export const roleUpdateApi = (params:{id:string,permission:string[]}) => {
+  return request.post<BaseRes>('/role/update',params)
+}
+//查询题库列表
+export const questionListApi = () => {
+    return request.get<BaseRes>('/question/list')
+}
