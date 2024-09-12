@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import {  Table, Button, Drawer, Tree, message } from 'antd'
-import type { TableProps, } from 'antd'
+import { Space, Table, Button, Drawer, Tree, message } from 'antd'
+import type { TableProps, TreeDataNode, TreeProps } from 'antd'
 import { roleListApi, permissionListApi, roleUpdateApi } from '../../services/systemap'
 import type { RoleItem } from '../../types/services/systemapi'
 import dayjs from 'dayjs'
+interface DataType {
+  key: string;
+  name: string;
+  age: number;
+  address: string;
+  tags: string[];
+}
 
 type CheckedPer = {
   checked: string[]
@@ -20,7 +27,7 @@ const System = () => {
   const [roleId, setRoleId] = useState('')
   const showDrawer = () => {
     setOpen(true);
-  }
+  };
 
   const onClose = () => {
     setOpen(false)
@@ -33,6 +40,10 @@ const System = () => {
   }
   useEffect(() => {
     getRoleListApi()
+    roleListApi()
+      .then(res => {
+        setRoleList(res.data.data.list)
+      })
     permissionListApi()
       .then(res => {
         setPermission(res.data.data.list)
@@ -53,6 +64,7 @@ const System = () => {
       message.error(res.data.msg)
     }
   }
+
   const columns: TableProps<RoleItem>['columns'] = [
     {
       title: '角色',
